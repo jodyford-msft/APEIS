@@ -27,6 +27,17 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal      
     - name: Deploy to IIS
+        uses: gregmac/iis-web-deploy@v2
+        with:
+          package: $(Build.ArtifactStagingDirectory)\apeis
+          server: 'http://apeis'
+          site: 'APEIS'
+      - name: Start IIS Website
+        run: |
+          Invoke-Command -ComputerName apeis -ScriptBlock {Start-Website -Name "APEIS"}
+    
+    
+    
       run: |
         echo "iis stopping"
         |  stop-webapppool {iis apppool APEIS}
