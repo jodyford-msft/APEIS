@@ -26,13 +26,26 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal  
+    - name: Start IIS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: |
+          Import-Module WebAdministration
+          Start-Service W3SVC
     - name: Stop IIS
-      plugin: powershell
-      vars:
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
         script: |
           Import-Module WebAdministration
           Stop-Service W3SVC
-          shell: pwsh
 #     - name: Deploy to IIS
 #       run: |
 #        echo "iis stopping"
