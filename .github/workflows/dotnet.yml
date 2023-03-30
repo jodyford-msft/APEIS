@@ -27,15 +27,14 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal  
     - name: stop app pool
-      uses: PowerShell@2
-      run:
+      run: |
         $applicationPoolName = 'APEIS'
         if((Get-WebAppPoolState -Name $applicationPoolName).Value -ne 'Stopped')
         {
-          Write-Output ('Stopping Application Pool: {0}' -f $applicationPoolName)
           Stop-WebAppPool -Name $applicationPoolName
           Start-Sleep -Seconds 2
         }
+      shell: pwsh
 #     - name: Deploy to IIS
 #       run: |
 #        echo "iis stopping"
