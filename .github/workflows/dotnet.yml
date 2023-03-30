@@ -25,10 +25,25 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal      
-    - name: Stop apeis
-      run: appcmd stop sites "APEIS"
-    - name: Publish Release
-      run: dotnet publish apeis --configuration Release -o C:\intpub\wwwroot\apeis
-    - name: Start example.com
-      run: appcmd start sites "APEIS"
+      run: dotnet test --no-build --verbosity normal  
+    - name: stop app pool
+      uses: PowerShell@2
+      run:
+        $applicationPoolName = 'APEIS'
+        if((Get-WebAppPoolState -Name $applicationPoolName).Value -ne 'Stopped')
+        {
+          Write-Output ('Stopping Application Pool: {0}' -f $applicationPoolName)
+          Stop-WebAppPool -Name $applicationPoolName
+          Start-Sleep -Seconds 2
+        }
+#     - name: Deploy to IIS
+#       run: |
+#        echo "iis stopping"
+#        stop-webapppool {iis apppool APEIS}
+#       # stop-iissite -Name {iis website APEIS} -Confirm: $false
+#       # echo "copy started"
+#       # Copy-Item ./apeis/apeis/apeis/* C:/inetpub/wwwroot/APEIS -Recurse -Force -Recurse -Force
+#       # echo "copy complete"
+#       # start-webapppool {iis apppool APEIS}
+#       # start-iissite {iis website APEIS}
+#       # echo "iis restarted"
