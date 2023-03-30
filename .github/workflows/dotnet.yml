@@ -22,8 +22,10 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore 
-    - name: publish
-      run: dotnet publish dotnet publish -r win-x64
+    - name: Build
+      run: dotnet publish --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal  
 
 
     - name: Stop IIS
