@@ -30,7 +30,10 @@ jobs:
     - name: Stop IIS
       run: |
         net stop W3SVC
-        
+    - name: Copy Build Code
+      run: |
+        xcopy /E /Y /I ./apeis/apeis/apeis/* C:\inetpub\wwwroot\apeis
+     
     - name: Start IIS
       run: |
         net start W3SVC
