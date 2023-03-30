@@ -26,25 +26,9 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal      
-    - name: Deploy to IIS
-        uses: gregmac/iis-web-deploy@v2
-        with:
-          package: $(Build.ArtifactStagingDirectory)\apeis
-          server: 'http://apeis'
-          site: 'APEIS'
-      - name: Start IIS Website
-        run: |
-          Invoke-Command -ComputerName apeis -ScriptBlock {Start-Website -Name "APEIS"}
-    
-    
-    
-      run: |
-        echo "iis stopping"
-        |  stop-webapppool {iis apppool APEIS}
-        |  stop-iissite -Name {iis website APEIS} -Confirm: $false
-        |  echo "copy started"
-        | Copy-Item ./apeis/apeis/apeis/* C:/inetpub/wwwroot/APEIS -Recurse -Force -Recurse -Force
-        | echo "copy complete"
-        | start-webapppool {iis apppool APEIS}
-        | start-iissite {iis website APEIS}
-        | echo "iis restarted"
+    - name: Stop apeis
+      run: appcmd stop sites "APEIS"
+    - name: Publish Release
+      run: dotnet publish apeis --configuration Release -o C:\intpub\wwwroot\apeis
+    - name: Start example.com
+      run: appcmd start sites "APEIS"
