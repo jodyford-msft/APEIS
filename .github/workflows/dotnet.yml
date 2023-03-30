@@ -31,18 +31,14 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal  
+
     - name: Stop IIS
-      shell: pwsh
       run: |
-        Import-Module WebAdministration
-        Stop-WebAppPool -Name 'APEIS'
-        Stop-Website -Name 'APEIS'
+        net stop W3SVC
+        
     - name: Start IIS
-      shell: pwsh
       run: |
-        Import-Module WebAdministration
-        Start-WebAppPool -Name 'APEIS'
-        Start-Website -Name 'APEIS'
+        net start W3SVC
 
 #     - name: Deploy to IIS
 #       run: |
