@@ -38,15 +38,3 @@ jobs:
     - name: Start IIS
       run: |
         net start W3SVC
-
-#     - name: Deploy to IIS
-#       run: |
-#        echo "iis stopping"
-#        stop-webapppool {iis apppool APEIS}
-#       # stop-iissite -Name {iis website APEIS} -Confirm: $false
-#       # echo "copy started"
-#       # Copy-Item ./apeis/apeis/apeis/* C:/inetpub/wwwroot/APEIS -Recurse -Force -Recurse -Force
-#       # echo "copy complete"
-#       # start-webapppool {iis apppool APEIS}
-#       # start-iissite {iis website APEIS}
-#       # echo "iis restarted"
